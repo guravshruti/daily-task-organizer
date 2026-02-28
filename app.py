@@ -29,7 +29,7 @@ h2, h3 {
 
 /* Input text */
 input {
-    color: white !important;
+    color: red !important;
 }
 
 /* Checkbox text */

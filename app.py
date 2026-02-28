@@ -61,18 +61,16 @@ if "tasks" not in st.session_state:
     st.session_state.tasks = []
 
 # Add new task
-new_task = st.text_input("Add a new mission", key="mission_input")
-
-if st.button("Add Mission"):
+def add_mission():
     if st.session_state.mission_input:
         st.session_state.tasks.append({
             "task": st.session_state.mission_input,
             "completed": False
         })
-        st.session_state.mission_input = ""   # 🔥 Clears the box
-        st.success("Mission added successfully!")
-    else:
-        st.warning("Enter a mission first!")
+        st.session_state.mission_input = ""
+
+st.text_input("Add a new mission", key="mission_input")
+st.button("Add Mission", on_click=add_mission)
 st.write("---")
 
 # Display tasks

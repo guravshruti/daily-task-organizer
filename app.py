@@ -1,11 +1,6 @@
 import streamlit as st
-from datetime import date
 
-st.set_page_config(
-    page_title="Superman Mission",
-    page_icon="🦸‍♂️",
-    layout="centered"
-)
+st.set_page_config(page_title="Superman Task Tracker", page_icon="🦸‍♂️")
 st.markdown("""
 <style>
 
@@ -58,48 +53,58 @@ div.stButton > button:hover {
 
 </style>
 """, unsafe_allow_html=True)
+st.title("🦸‍♂️ Superman Daily Mission Tracker")
+st.write("Plan your missions. Conquer your day like a hero.")
 
+# Initialize session state
+if "tasks" not in st.session_state:
+    st.session_state.tasks = []
 
-# ---------- Session State (No JSON Needed) ----------
-if "streak" not in st.session_state:
-    st.session_state.streak = 0
-    st.session_state.last_date = ""
+# Add new task
+new_task = st.text_input("Add a new mission")
 
-st.title("🦸‍♂️ Superman Daily Mission")
+if st.button("Add Mission"):
+    if new_task:
+        st.session_state.tasks.append({"task": new_task, "completed": False})
+        st.success("Mission added successfully!")
+    else:
+        st.warning("Enter a mission first!")
+st.write("---")
 
-st.markdown("""
-<div class="mission-box">
-<strong>Today's Mission:</strong><br>
-✔ Stay disciplined<br>
-✔ Finish your tasks<br>
-✔ Train like a hero<br>
-✔ Win the day
-</div>
-""", unsafe_allow_html=True)
+# Display tasks
+st.subheader("Today's Missions")
 
-st.markdown("## 🔥 Current Streak")
-st.markdown(f"<div class='big-number'>{st.session_state.streak} Days</div>", unsafe_allow_html=True)
+completed = []
+incompleted = []
 
-if st.button("Mission Completed ✅"):
-    today = str(date.today())
+for i, task_data in enumerate(st.session_state.tasks):
+    checked = st.checkbox(task_data["task"], value=task_data["completed"], key=i)
+    st.session_state.tasks[i]["completed"] = checked
 
-    if st.session_state.last_date != today:
-        st.session_state.streak += 1
-        st.session_state.last_date = today
-        st.success("Power Level Increased 💪")
+    if checked:
+        completed.append(task_data["task"])
+    else:
+        incompleted.append(task_data["task"])
 
+st.write("---")
+if st.button("Mission Report"):
 
+    st.subheader("✅ Missions Accomplished")
+    if completed:
+        for task in completed:
+            st.write("🟢 " + task)
+        st.success("Outstanding work, Hero! 💪🔥")
+    else:
+        st.info("No missions completed yet.")
 
-
-    
-
- 
-
-
-
-
-
-
+    st.subheader("❌ Pending Missions")
+    if incompleted:
+        for task in incompleted:
+            st.write("🔴 " + task)
+        st.warning("Finish these and save the day! 🦸‍♂️")
+    else:
+        st.balloons()
+        st.success("All missions completed! The world is safe! 🌍✨")
   
 
 

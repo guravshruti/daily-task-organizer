@@ -61,16 +61,23 @@ if "tasks" not in st.session_state:
     st.session_state.tasks = []
 
 # Add new task
-def add_mission():
-    if st.session_state.mission_input:
+# Add new task
+
+if "mission_input" not in st.session_state:
+    st.session_state.mission_input = ""
+
+new_task = st.text_input("Add a new mission", key="mission_input")
+
+if st.button("Add Mission"):
+    if new_task:
         st.session_state.tasks.append({
-            "task": st.session_state.mission_input,
+            "task": new_task,
             "completed": False
         })
         st.session_state.mission_input = ""
-
-st.text_input("Add a new mission", key="mission_input")
-st.button("Add Mission", on_click=add_mission)
+        st.rerun()   # 🔥 This refreshes safely
+    else:
+        st.warning("Enter a mission first!")
 st.write("---")
 
 # Display tasks

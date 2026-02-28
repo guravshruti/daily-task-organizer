@@ -63,10 +63,7 @@ if "tasks" not in st.session_state:
 # Add new task
 # Add new task
 
-if "mission_input" not in st.session_state:
-    st.session_state.mission_input = ""
-
-new_task = st.text_input("Add a new mission", key="mission_input")
+new_task = st.text_input("Add a new mission")
 
 if st.button("Add Mission"):
     if new_task:
@@ -74,8 +71,8 @@ if st.button("Add Mission"):
             "task": new_task,
             "completed": False
         })
-        st.session_state.mission_input = ""
-        st.rerun()   # 🔥 This refreshes safely
+        st.success("Mission added successfully!")
+        st.rerun()
     else:
         st.warning("Enter a mission first!")
 st.write("---")

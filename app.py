@@ -3,128 +3,124 @@ import json
 import os
 from datetime import date
 
-st.set_page_config(page_title="Superman Mission Tracker", page_icon="🦸‍♂️")
+st.set_page_config(
+    page_title="Superman Mission",
+    page_icon="🦸‍♂️",
+    layout="centered"
+)
 
-DATA_FILE = "data.json"
-
-# ---------- LOAD DATA ----------
-if os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "r") as f:
-        data = json.load(f)
-else:
-    data = {"tasks": [], "streak": 0, "last_completed": ""}
-
-# ---------- SAVE FUNCTION ----------
-def save_data():
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f)
-
-# ---------- SUPERHERO STYLE ----------
+# ---------- CSS ----------
 st.markdown("""
 <style>
+
+/* Remove all extra padding */
+.block-container {
+    padding-top: 0.5rem;
+    padding-bottom: 0rem;
+}
+
+/* Remove gap between elements */
+div[data-testid="stVerticalBlock"] > div {
+    gap: 0rem;
+}
+
+/* Background */
 .stApp {
-    background: linear-gradient(135deg, #0b3d91, #001f54);
+    background: linear-gradient(to bottom, #0b0f2b, #1a1f4f);
     color: white;
 }
 
+/* Title */
 h1 {
-    text-align: center;
-    color: #ffd700;
-    text-shadow: 2px 2px 8px black;
+    color: #FFD700;
+    font-size: 42px;
+    margin-bottom: 0px;
 }
 
-div.stButton > button {
-    background-color: #e10600;
-    color: white;
+/* Subheaders */
+h2 {
+    color: #00BFFF;
+    font-size: 28px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Streak number */
+.big-number {
+    font-size: 48px;
     font-weight: bold;
-    border-radius: 10px;
-    height: 3em;
-    width: 100%;
+    color: #FFD700;
+    margin-top: -5px;
+    margin-bottom: 5px;
 }
 
-div.stButton > button:hover {
-    background-color: #ff2a2a;
+/* Mission box */
+.mission-box {
+    background-color: #11163a;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #FFD700;
+    font-size: 18px;
+    margin-bottom: 8px;
 }
+
+/* Button */
+.stButton > button {
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- HEADER ----------
-st.title("🦸‍♂️ SUPERMAN DAILY MISSION TRACKER")
-st.markdown(f"### 📅 {date.today().strftime('%B %d, %Y')}")
+# ---------- Data ----------
+DATA_FILE = "data.json"
 
-st.write("Every day is a mission. Heroes don't quit.")
+if not os.path.exists(DATA_FILE):
+    with open(DATA_FILE, "w") as f:
+        json.dump({"streak": 0, "last_date": ""}, f)
 
-st.write("---")
+with open(DATA_FILE, "r") as f:
+    data = json.load(f)
 
-# ---------- STREAK DISPLAY ----------
-st.subheader(f"🔥 Current Streak: {data['streak']} Days")
+# ---------- Title ----------
+st.title("🦸‍♂️ Superman Daily Mission")
 
-st.write("---")
+# ---------- Mission ----------
+st.markdown("""
+<div class="mission-box">
+<strong>Today's Mission:</strong><br>
+✔ Stay disciplined<br>
+✔ Finish your tasks<br>
+✔ Train like a hero<br>
+✔ Win the day
+</div>
+""", unsafe_allow_html=True)
 
-# ---------- ADD MISSION ----------
-new_task = st.text_input("Add a new mission")
+# ---------- Streak ----------
+st.subheader("🔥 Current Streak")
+st.markdown(f"""
+<div class="big-number">
+{data['streak']} Days
+</div>
+""", unsafe_allow_html=True)
 
-if st.button("🚀 Add Mission"):
-    if new_task:
-        data["tasks"].append({"task": new_task, "completed": False})
-        save_data()
-        st.success("Mission Added 🔥")
-    else:
-        st.warning("Enter a mission first!")
+# ---------- Button ----------
+if st.button("Mission Completed ✅"):
+    today = str(date.today())
 
-st.write("---")
+    if data["last_date"] != today:
+        data["streak"] += 1
+        data["last_date"] = today
 
-# ---------- DISPLAY MISSIONS ----------
-completed = []
-incompleted = []
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f)
 
-for i, task_data in enumerate(data["tasks"]):
-    checked = st.checkbox(task_data["task"], value=task_data["completed"], key=i)
-    data["tasks"][i]["completed"] = checked
+        st.success("Power Level Increased 💪")
 
-    if checked:
-        completed.append(task_data["task"])
-    else:
-        incompleted.append(task_data["task"])
 
-save_data()
 
-st.write("---")
 
-# ---------- MISSION REPORT ----------
-if st.button("📝 Mission Report"):
 
-    st.subheader("✅ Missions Accomplished")
 
-    if completed:
-        for task in completed:
-            st.write("🟢 " + task)
-
-        today = str(date.today())
-
-        if data["last_completed"] != today:
-            data["streak"] += 1
-            data["last_completed"] = today
-            save_data()
-
-        st.success("Outstanding Work, Hero! 💪🔥")
-
-    else:
-        st.info("No missions completed yet.")
-
-    st.subheader("❌ Pending Missions")
-
-    if incompleted:
-        for task in incompleted:
-            st.write("🔴 " + task)
-    else:
-        st.balloons()
-        st.success("All missions completed! The world is safe 🌍✨")
-
-# ---------- RESET ----------
-st.write("---")
-
-if st.button("🔄 Reset All Missions"):
-    data["tasks"] = []
-    save_data()
-    st.success("New Day. New Power. New Missions. 💥")

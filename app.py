@@ -3,78 +3,40 @@ import json
 import os
 from datetime import date
 
-st.set_page_config(
-    page_title="Superman Mission",
-    page_icon="🦸‍♂️",
-    layout="centered"
-)
+# ---------- Page Config ----------
+st.set_page_config(page_title="Superman Mission Tracker", page_icon="🦸‍♂️")
 
-# ---------- CSS ----------
+# ---------- Custom CSS ----------
 st.markdown("""
 <style>
-
-/* Remove all extra padding */
-.block-container {
-    padding-top: 0.5rem;
-    padding-bottom: 0rem;
-}
-
-/* Remove gap between elements */
-div[data-testid="stVerticalBlock"] > div {
-    gap: 0rem;
-}
-
-/* Background */
 .stApp {
     background: linear-gradient(to bottom, #0b0f2b, #1a1f4f);
     color: white;
 }
 
-/* Title */
-h1 {
+h1, h2, h3 {
     color: #FFD700;
-    font-size: 42px;
-    margin-bottom: 0px;
 }
 
-/* Subheaders */
-h2 {
-    color: #00BFFF;
-    font-size: 28px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-/* Streak number */
 .big-number {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: bold;
-    color: #FFD700;
-    margin-top: -5px;
-    margin-bottom: 5px;
+    color: #00BFFF;
+    margin-top: -15px;
 }
 
-/* Mission box */
 .mission-box {
     background-color: #11163a;
-    padding: 12px;
+    padding: 15px;
     border-radius: 10px;
-    border: 2px solid #FFD700;
-    font-size: 18px;
-    margin-bottom: 8px;
+    border: 1px solid #FFD700;
+    color: white;
+    margin-top: 10px;
 }
-
-/* Button */
-.stButton > button {
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Data ----------
+# ---------- Data File ----------
 DATA_FILE = "data.json"
 
 if not os.path.exists(DATA_FILE):
@@ -87,19 +49,22 @@ with open(DATA_FILE, "r") as f:
 # ---------- Title ----------
 st.title("🦸‍♂️ Superman Daily Mission")
 
-# ---------- Mission ----------
+# ---------- Mission Section ----------
+st.subheader("🎯 Today's Mission")
 st.markdown("""
 <div class="mission-box">
-<strong>Today's Mission:</strong><br>
+✔ Be strong<br>
 ✔ Stay disciplined<br>
-✔ Finish your tasks<br>
-✔ Train like a hero<br>
-✔ Win the day
+✔ Complete all tasks<br>
+✔ Protect your goals like Superman
 </div>
 """, unsafe_allow_html=True)
 
-# ---------- Streak ----------
+# ---------- Decreased Space Before Streak ----------
+st.markdown("<br>", unsafe_allow_html=True)
+
 st.subheader("🔥 Current Streak")
+
 st.markdown(f"""
 <div class="big-number">
 {data['streak']} Days
@@ -117,9 +82,18 @@ if st.button("Mission Completed ✅"):
         with open(DATA_FILE, "w") as f:
             json.dump(data, f)
 
-        st.success("Power Level Increased 💪")
+        st.success("Superman Power Increased! 💪")
+
+    
+
+ 
 
 
+
+
+
+
+  
 
 
 

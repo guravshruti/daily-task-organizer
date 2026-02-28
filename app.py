@@ -6,46 +6,59 @@ st.set_page_config(
     page_icon="🦸‍♂️",
     layout="centered"
 )
-
-# ---------- Style ----------
 st.markdown("""
 <style>
-header {visibility: hidden;}
-footer {visibility: hidden;}
 
-.block-container {
-    padding-top: 1rem;
-    padding-bottom: 0rem;
-}
-
+/* Background */
 .stApp {
-    background: linear-gradient(to bottom, #0b0f2b, #1a1f4f);
-    color: white;
+    background: linear-gradient(135deg, #0b3d91, #001f54);
+    color: white !important;
 }
 
+/* Make ALL normal text white */
+p, div, span, label {
+    color: white !important;
+}
+
+/* Title */
 h1 {
-    color: #FFD700;
-    font-size: 48px;
     text-align: center;
+    color: #FFD700 !important;
+    text-shadow: 2px 2px 8px black;
 }
 
-.mission-box {
-    background-color: #11163a;
-    padding: 15px;
-    border-radius: 12px;
-    border: 2px solid #FFD700;
-    font-size: 20px;
-    margin-bottom: 10px;
+/* Subheaders */
+h2, h3 {
+    color: #00BFFF !important;
 }
 
-.big-number {
-    font-size: 52px;
+/* Input text */
+input {
+    color: white !important;
+}
+
+/* Checkbox text */
+div[data-testid="stCheckbox"] label {
+    color: white !important;
+}
+
+/* Buttons */
+div.stButton > button {
+    background-color: #e10600;
+    color: white !important;
     font-weight: bold;
-    color: #FFD700;
-    text-align: center;
+    border-radius: 10px;
+    height: 3em;
+    width: 100%;
 }
+
+div.stButton > button:hover {
+    background-color: #ff2a2a;
+}
+
 </style>
 """, unsafe_allow_html=True)
+
 
 # ---------- Session State (No JSON Needed) ----------
 if "streak" not in st.session_state:
